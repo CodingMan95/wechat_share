@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.eim.mapper.ShareInfoMapper">
+
+    <update id="updateShareInfo" parameterType="com.eim.entity.ShareInfo">
+        update
+        share_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">name=#{name},</if>
+            <if test="introduce != null">introduce=#{introduce},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="code != null">code=#{code},</if>
+            <if test="sharePic != null">share_pic=#{sharePic},</if>
+            <if test="shareWord != null">share_word=#{shareWord},</if>
+            <if test="shareTitle != null">share_title=#{shareTitle},</if>
+            <if test="time != null">time=#{time},</if>
+            <if test="totalNum != null">total_num=#{totalNum},</if>
+        </trim>
+        where
+        share_id = #{shareId}
+    </update>
+
+    <!-- 添加 -->
+    <insert id="addShareInfo" parameterType="com.eim.entity.ShareInfo">
+        <!-- selectKey 标签实现主键返回 -->
+        <!-- keyColumn:主键对应的表中的哪一列 -->
+        <!-- keyProperty：主键对应的pojo中的哪一个属性 -->
+        <!-- order：设置在执行insert语句前执行查询id的sql，在执行insert语句之后执行查询id的sql -->
+        <!-- resultType：设置返回的id的类型 -->
+        <selectKey keyColumn="share_id" keyProperty="shareId" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        share_info(openid, name, introduce, type, code, share_pic, share_word, time, total_num, share_title)
+        VALUES
+        (#{openid}, #{name}, #{introduce}, #{type}, #{code}, #{sharePic}, #{shareWord}, #{time}, #{totalNum},
+        #{shareTitle})
+    </insert>
+
+    <select id="listShare" resultType="com.eim.entity.ShareInfo">
+          SELECT  *  FROM share_info  WHERE openid = #{openid}
+    </select>
+
+    <select id="shareNum" resultType="com.eim.entity.ShareInfo">
+          SELECT   *   FROM share_info     WHERE share_id = #{shareId}
+    </select>
+
+</mapper>
